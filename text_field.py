@@ -39,7 +39,7 @@ class TextField:
         self.eng_upper_table = {low[x]: up[x] for x in range(len(low))}
         
         low = "1234567890-=\."
-        up = "!\"№;%:?*()_+/,"
+        up = '!\"№;%:?*()_+/,'
         self.rus_upper_table = {low[x]: up[x] for x in range(len(low))}
         
         self.upper_table = {"eng": self.eng_upper_table, 
@@ -67,6 +67,12 @@ class TextField:
         elif event.type == pygame.KEYUP and \
             pygame.key.name(event.key) == "left alt":
                 self.alt_down = False
+
+        # добавил капслок на всякий случай 
+        elif event.type == pygame.KEYDOWN and \
+            pygame.key.name(event.key) == "caps lock":
+                self.__change_language__()
+
 
         # обработка остальных нажатий
         elif event.type == pygame.KEYDOWN:
