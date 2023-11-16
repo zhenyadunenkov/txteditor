@@ -1,42 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import pygame
+from tkinter import Tk, Label, Entry, Text
 
-from text_field import TextField
-
-WIDTH = 800
-HEIGHT = 600    
+GEOMETRY = "800x600"
 
 class App:
-    def __init__(self, width: int, height: int) -> None:
-        pygame.init()
+    def __init__(self) -> None:
 
-        self.window = pygame.display.set_mode((width, height))
-        pygame.display.set_caption("Текстовый редактор")
+        self.window = Tk()
+        self.window.title("Текстовый редактор")
+        self.window.geometry(GEOMETRY)
+        self.window.configure(bg="black")
         
-        self.text_field = TextField()
+        self.label = Label(text="Мы тут не шуточки шутить пришли, текст вводи!",
+                           bg="black", fg="white")
+        self.label.pack()
         
-        self.mainloop()
-
-        pygame.quit()
-
-    def mainloop(self) -> None:
-
-        running = True
-        
-        while running:
-            for event in pygame.event.get():
-                self.text_field.event_processor(event)
-                if self.text_field.need_update:
-                    self.text_field.vizualize(self.window)
-                    pygame.display.flip()
-                    self.text_field.need_update = False
-                if self.text_field.need_exit:
-                    running = False
-
+        self.text_field = Text(self.window, bd=1, bg="black", fg="white",
+                               highlightthickness = 0, borderwidth = 0,
+                               insertbackground="white")
+        self.text_field.pack()
+        self.text_field.focus()
+        self.window.mainloop()
 
             
     
     
-my_app = App(width=WIDTH, height=HEIGHT)
+my_app = App()
