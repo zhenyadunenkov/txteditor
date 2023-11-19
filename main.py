@@ -51,9 +51,19 @@ class App:
                                insertbackground = "white",
                                wrap = "word")
         self.text_field.pack()
-        self.text_field.bind("<Key>", self.__update_text)
+        self.text_field.bind("<KeyRelease>", self.__update_text)
         self.text_field.focus()
         
+        
+        # DEBUG TEXT
+        self.current_txt = Text(self.window, bg = "black", fg = "white",
+                               highlightthickness = 0, borderwidth = 0,
+                               insertbackground = "white",
+                               wrap = "word")
+        self.current_txt.configure(state="disabled")
+        self.current_txt.pack()
+        self.current_txt.insert("1.0", "popop")
+                                
     def __app_loop(self) -> None:
         self.window.mainloop()
         
@@ -67,8 +77,12 @@ class App:
         self.window.destroy()
         
     def __update_text(self, event: Event) -> None:
-        current_text = self.text_field.get(1.0, "end-1c")
+        current_text = self.text_field.get("1.0", "end-1c")
         self.document.update_text(current_text, self.level_of_editing)
         
+        self.current_txt.configure(state="normal")
+        self.current_txt.delete('1.0', "end")
+        self.current_txt.insert('1.0', self.document.get_text(self.level_of_editing))
+        self.current_txt.configure(state="disabled")
     
 my_app = App()
