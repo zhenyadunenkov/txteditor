@@ -1,30 +1,74 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from tkinter import Tk, Label, Entry, Text
+from tkinter import Tk, Label, Entry, Text, Button, Event
+from document import Document
 
-GEOMETRY = "800x600"
+
+SIZE = "800x600"
 
 class App:
-    def __init__(self) -> None:
 
+    def __init__(self) -> None:
+        self.__init_document()
+        self.__init_gui()        
+        self.__app_loop()
+        
+    def __init_document(self) -> None:
+        self.document = Document()
+        self.level_of_editing = "full"
+
+    def __init_gui(self) -> None:
+        # WINDOW
         self.window = Tk()
         self.window.title("Текстовый редактор")
-        self.window.geometry(GEOMETRY)
+        self.window.geometry(SIZE)
         self.window.configure(bg="black")
-        
-        self.label = Label(text="Мы тут не шуточки шутить пришли, текст вводи!",
-                           bg="black", fg="white")
-        self.label.pack()
-        
-        self.text_field = Text(self.window, bd=1, bg="black", fg="white",
-                               highlightthickness = 0, borderwidth = 0,
-                               insertbackground="white")
-        self.text_field.pack()
-        self.text_field.focus()
-        self.window.mainloop()
+        self.window.bind("<Escape>", self.__quit)
 
-            
+        # TEXT LABELS
+        self.hint = Label(text="Вводи текст в окошке ниже!",
+                           bg="black", fg="white")
+        self.hint.pack()
+        
+        self.level = Label(text="Уровень работы с текстом: весь текст",
+                           bg="black", fg="white")
+        self.level.pack()
+
+        
+        # BUTTONS
+        self.button_less = Button(text="less")
+        self.button_less.config(command=self.__summarize)
+        self.button_less.pack()
+
+        self.button_more = Button(text="more")
+        self.button_more.config(command=self.__expand)
+        self.button_more.pack()
+        
+        # ENTRY FIELD
+        self.text_field = Text(self.window, bd = 1, bg = "black", fg = "white",
+                               highlightthickness = 0, borderwidth = 0,
+                               insertbackground = "white",
+                               wrap = "word")
+        self.text_field.pack()
+        self.text_field.bind("<Key>", self.__update_text)
+        self.text_field.focus()
+        
+    def __app_loop(self) -> None:
+        self.window.mainloop()
+        
+    def __summarize(self) -> None:
+        print("text is summed up")
     
+    def __expand(self) -> None:
+        print("text is expanded")
+
+    def __quit(self, event: Event) -> None:
+        self.window.destroy()
+        
+    def __update_text(self, event: Event) -> None:
+        current_text = self.text_field.get(1.0, "end-1c")
+        self.document.update_text(current_text, self.level_of_editing)
+        
     
 my_app = App()
