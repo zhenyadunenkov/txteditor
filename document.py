@@ -92,9 +92,3 @@ class Document(Singleton):
             if len(summary) < len(full):
                 offset = (len(full) - len(summary)) // 2
                 self.__marked_text[i]["summary"] += " " + " `" * offset
-
-doc1 = Document()
-doc2 = Document()
-
-doc1.update_text("dfgdfgfdgfdg", "full")
-print(doc2("full"))

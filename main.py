@@ -130,7 +130,6 @@ class App(ctk.CTk):
     def __update_document_summary(self, event: Event) -> None:
         if self.level_of_editing == "full":
             return
-        print("обновляю суммари")
         current_text = self.summary_field.get("1.0", "end")
         self.document.update_text(current_text, "summary")
 
