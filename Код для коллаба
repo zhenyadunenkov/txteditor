@@ -1,0 +1,38 @@
+# ЧАСТЬ В ШЕЛЛЕ
+# Ставим библиотеки, авторизируемся в ngrok
+!pip install flask-ngrok
+!pip install pyngrok==4.1.1
+!ngrok authtoken 2Z2D2SrKsHh906TAcOx8J1VIQK7_htTniUF4rQSAUDwhQd7r
+!pip install transformers
+
+# ЧАСТЬ НА ПИТОНЕ
+from flask import Flask, request
+from flask_ngrok import run_with_ngrok
+from transformers import pipeline
+
+class WebApp:
+
+  def __init__(self) -> None:
+    self.pipe = pipeline('summarization', model='d0rj/rut5-base-summ')
+    self.app = Flask(__name__)
+    run_with_ngrok(self.app)
+
+    @self.app.route("/")
+    def home():
+      return "Home"
+
+    @self.app.route('/json', methods=['POST'])
+    def handle_json():
+        data = request.json
+        text = data.get('to_sum')
+        summary = self.pipe(text)[0]["summary_text"]
+        return summary
+
+
+    self.app.run()
+
+my_app = WebApp()
+
+# скопировать адрес типа "http://25f2-34-125-34-172.ngrok-free.app", который
+# появится после выполнения кода и вставить в качестве значения self.url в классе
+# Summarizer в файле nlp_magic
